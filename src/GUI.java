@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 import static javax.swing.SwingConstants.TOP;
 
-public class GUI extends JFrame implements ActionListener, RobotCallback{
+public class GUI extends JFrame implements ActionListener, RobotEventListener {
 
     private JPanel panel;
     private JLabel greetingLabel;
@@ -22,7 +22,7 @@ public class GUI extends JFrame implements ActionListener, RobotCallback{
     private double distance;
     private final int LOWER_BOUND = 0;
     private final int INCREMENT = 1;
-    private boolean flag;
+    private boolean isValuesSet;
 
     public GUI() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -89,11 +89,11 @@ public class GUI extends JFrame implements ActionListener, RobotCallback{
     @Override
     public void actionPerformed(ActionEvent e) {
         legsCount = 0;
-        flag = true;
+        isValuesSet = true;
         button.setEnabled(true);
         textArea.setText("");
         valuesSet();
-        if(flag) {
+        if(isValuesSet) {
             new Robot(this, legsCount, distance);
         }
         refreshForm();
@@ -103,13 +103,13 @@ public class GUI extends JFrame implements ActionListener, RobotCallback{
         legsCount = (Integer) spinner.getValue();
         if (legsCount == 0) {
             textArea.append("Please, set the number of legs. \n");
-            flag = false;
+            isValuesSet = false;
         }
         try {
             distance = Integer.parseInt(textField.getText());
         } catch (NumberFormatException ex) {
             textArea.append("Please, set distance. \n");
-            flag = false;
+            isValuesSet = false;
         }
     }
 
@@ -119,7 +119,16 @@ public class GUI extends JFrame implements ActionListener, RobotCallback{
     }
 
     @Override
-    public void resultGot(String output){
-        textArea.append(output);
+    public void stepDone(String str) {
+        appendResult(str);
+    }
+
+    @Override
+    public void robotStopped(String str) {
+        appendResult(str);
+    }
+
+    private void appendResult(String str) {
+        textArea.append(str);
     }
 }

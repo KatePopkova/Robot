@@ -3,14 +3,14 @@ import java.util.ArrayList;
 public class Robot implements LegCallback {
 
     private Object synchObj = new Object();
-    private RobotCallback callback;
+    private RobotEventListener callback;
     private int steps = 0;
-    private boolean flag = false;
+    private boolean isAllStepsDone = false;
 
     private ArrayList<Leg> legs;
     private double distance;
 
-    public Robot(RobotCallback callback, int legsCount, double distance) {
+    public Robot(RobotEventListener callback, int legsCount, double distance) {
         this.callback = callback;
         this.distance = distance;
         System.out.println(distance);
@@ -34,16 +34,15 @@ public class Robot implements LegCallback {
     public void legMoved(Leg leg) {
         synchronized (synchObj) {
             if ((callback != null) && (distance > 0)) {
-                callback.resultGot("The robot moved with ".concat(Integer.toString(legs.indexOf(leg) + 1).concat(" leg.\n")));
-                callback.resultGot(distancePassed());
-            }
-            else if (!flag) {
-                callback.resultGot(distancePassed());
-                callback.resultGot(Integer.toString(steps).concat(" steps have been done. \n"));
-                flag = true;
+                callback.stepDone("The robot moved with ".concat(Integer.toString(legs.indexOf(leg) + 1).concat(" leg.\n")));
+                callback.stepDone(distancePassed());
             }
             else {
-               callback.resultGot("");
+                if(!isAllStepsDone) {
+                    callback.robotStopped(distancePassed());
+                    callback.robotStopped(Integer.toString(steps).concat(" steps have been done. \n"));
+                    isAllStepsDone = true;
+                }
             }
             synchObj.notify();
         }
