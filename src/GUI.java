@@ -83,7 +83,6 @@ public class GUI extends JFrame implements ActionListener, RobotCallback{
         panel.add(button);
         button.addActionListener(this);
 
-
         setContentPane(panel);
     }
 
