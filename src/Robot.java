@@ -13,8 +13,12 @@ public class Robot implements LegCallback {
     public Robot(RobotEventListener callback, int legsCount, double distance) {
         this.callback = callback;
         this.distance = distance;
-        System.out.println(distance);
         legs = new ArrayList<>(legsCount);
+        System.out.print(distance + "\n");
+        createLeg(legsCount);
+    }
+
+    private void createLeg(int legsCount) {
         for (int i = 1; i <= legsCount; i++) {
             Leg leg = new Leg(this);
             legs.add(leg);
@@ -25,38 +29,38 @@ public class Robot implements LegCallback {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
+        }
+        if (distance > 0) {
+            legs.clear();
+            createLeg(legsCount);
         }
     }
 
     @Override
     public void legMoved(Leg leg) {
         synchronized (synchObj) {
-            if ((callback != null) && (distance > 0)) {
-                callback.stepDone("The robot moved with ".concat(Integer.toString(legs.indexOf(leg) + 1).concat(" leg.\n")));
-                callback.stepDone(distancePassed());
-            }
-            else {
-                if(!isAllStepsDone) {
-                    callback.robotStopped(distancePassed());
-                    callback.robotStopped(Integer.toString(steps).concat(" steps have been done. \n"));
-                    isAllStepsDone = true;
+            System.out.println(Thread.currentThread().toString() + "\n");
+            if ((callback != null) && (distance > 0.0)) {
+                callback.stepDone(legs.indexOf(leg) + 1);
+                distancePassed();
+                System.out.println("IF: distance not passed. \n");
                 }
+                else {
+                    if ((callback != null) && (isAllStepsDone)) {
+                        System.out.println("IF: distance passed. \n");
+                        callback.robotStopped(steps);
+                        isAllStepsDone = true;
+                    }
+                }
+                synchObj.notify();
             }
-            synchObj.notify();
         }
-    }
 
-    private String distancePassed() {
-        if(distance > 0) {
-            distance = distance - (0.5 + Math.random() * 1);
-            System.out.println(distance);
-            steps++;
-            return "";
-        }
-        else {
-            return "Distance has been passed.\n";
-        }
+
+    private void distancePassed() {
+        distance = distance - (0.5 + Math.random() * 1);
+        System.out.println(distance);
+        steps++;
     }
 }

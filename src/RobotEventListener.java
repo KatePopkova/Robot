@@ -1,4 +1,4 @@
 public interface RobotEventListener {
-    void stepDone(String str);
-    void robotStopped(String str);
+    void stepDone(int leg);
+    void robotStopped(int steps);
 }

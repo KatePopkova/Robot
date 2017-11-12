@@ -119,13 +119,14 @@ public class GUI extends JFrame implements ActionListener, RobotEventListener {
     }
 
     @Override
-    public void stepDone(String str) {
-        appendResult(str);
+    public void stepDone(int leg) {
+        appendResult("The robot moved with ".concat(Integer.toString(leg).concat(" leg.\n")));
     }
 
     @Override
-    public void robotStopped(String str) {
-        appendResult(str);
+    public void robotStopped(int steps) {
+        appendResult(Integer.toString(steps).concat(" steps have been done.\n ")
+                .concat("Distance has been passed.\n"));
     }
 
     private void appendResult(String str) {
