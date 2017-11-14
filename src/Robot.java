@@ -51,7 +51,6 @@ public class Robot implements LegCallback {
         }
     }
 
-
     private void distancePassed() {
         distance = distance - (0.5 + Math.random() * 1);
         steps++;
