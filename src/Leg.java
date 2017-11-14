@@ -9,7 +9,7 @@ public class Leg extends Thread {
     @Override
     public void run() {
         if (callback != null) {
-                callback.legMoved(this);
+            callback.legMoved(this);
         }
     }
 }
