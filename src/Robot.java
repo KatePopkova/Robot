@@ -30,7 +30,6 @@ public class Robot implements LegCallback {
             }
         }
         if (distance > (double) 0) {
-            legs.clear();
             createLeg(legsCount);
         }
         else {
@@ -41,8 +40,8 @@ public class Robot implements LegCallback {
     @Override
     public void legMoved(Leg leg) {
         synchronized (synchObj) {
-            System.out.println(Thread.currentThread().toString() + "\n");
-            System.out.print(distance + "\n");
+            System.out.print(distance + "\n\n");
+            System.out.println(Thread.currentThread().toString());
             if (callback != null & distance > (double) 0) {
                 callback.stepDone(legs.indexOf(leg) + 1);
                 distancePassed();
