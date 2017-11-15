@@ -90,14 +90,16 @@ public class GUI extends JFrame implements ActionListener, RobotEventListener {
     public void actionPerformed(ActionEvent e) {
         legsCount = 0;
         isValuesSet = true;
-        setValues();
+        button.setEnabled(true);
+        textArea.setText("");
+        valuesSet();
         if(isValuesSet) {
             new Robot(this, legsCount, distance);
         }
         refreshForm();
     }
 
-    public void setValues() {
+    public void valuesSet() {
         legsCount = (Integer) spinner.getValue();
         if (legsCount == 0) {
             textArea.append("Please, set the number of legs. \n");
@@ -118,12 +120,16 @@ public class GUI extends JFrame implements ActionListener, RobotEventListener {
 
     @Override
     public void stepDone(int leg) {
-        textArea.append("The robot moved with ".concat(Integer.toString(leg).concat(" leg.\n")));
+        appendResult("The robot moved with ".concat(Integer.toString(leg).concat(" leg.\n")));
     }
 
     @Override
     public void robotStopped(int steps) {
-        textArea.append(Integer.toString(steps).concat(" steps have been done.\n")
+        appendResult(Integer.toString(steps).concat(" steps have been done.\n")
                     .concat("Distance has been passed.\n"));
+    }
+
+    private void appendResult(String str) {
+        textArea.append(str);
     }
 }
