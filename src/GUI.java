@@ -90,7 +90,6 @@ public class GUI extends JFrame implements ActionListener, RobotEventListener {
     public void actionPerformed(ActionEvent e) {
         legsCount = 0;
         isValuesSet = true;
-        textArea.setText("");
         setValues();
         if(isValuesSet) {
             new Robot(this, legsCount, distance);
