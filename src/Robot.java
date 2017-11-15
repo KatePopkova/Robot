@@ -12,8 +12,7 @@ public class Robot implements LegCallback {
     public Robot(RobotEventListener callback, int legsCount, double distance) {
         this.callback = callback;
         this.distance = distance;
-        legs = new ArrayList<>(legsCount);
-        System.out.print(distance + "\n");
+        legs = new ArrayList<>(legsCount);;
         createLeg(legsCount);
     }
 
@@ -30,7 +29,7 @@ public class Robot implements LegCallback {
                 }
             }
         }
-        if (distance > 0) {
+        if (distance > 0.0) { ;
             legs.clear();
             createLeg(legsCount);
         }
@@ -42,20 +41,18 @@ public class Robot implements LegCallback {
     @Override
     public void legMoved(Leg leg) {
         synchronized (synchObj) {
-            System.out.println(Thread.currentThread().toString() + "\n");
+            System.out.print(distance + "\n\n");
+            System.out.println(Thread.currentThread().toString());
             if (callback != null & distance > 0.0) {
                 callback.stepDone(legs.indexOf(leg) + 1);
                 distancePassed();
-                System.out.println("IF: distance not passed. \n".concat(Double.toString(distance)));
             }
             synchObj.notify();
         }
     }
 
-
     private void distancePassed() {
         distance = distance - (0.5 + Math.random() * 1);
-        System.out.println(distance);
         steps++;
     }
 }
